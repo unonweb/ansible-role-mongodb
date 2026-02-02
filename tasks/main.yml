@@ -1,0 +1,48 @@
+---
+- name: mongodb role
+  tags:
+    - mongodb
+  block:
+
+  # mkdir
+  - name: Make sure directory /etc/apt/keyrings exists
+    become: true
+    ansible.builtin.file:
+      path: /etc/apt/keyrings
+      mode: u=rwx,g=rx,o=rx
+      state: directory
+      
+  # repo key
+  - name: Copy repo key
+    become: true
+    ansible.builtin.copy:
+      src: "{{ mongodb_apt_repo_key_file }}"
+      dest: "/etc/apt/keyrings/{{ mongodb_apt_repo_key_file }}"
+      owner: root
+      group: root
+      mode: u=rw,g=r,o=r
+
+  # repo file
+  - name: Copy repo file
+    become: true
+    ansible.builtin.copy:
+      src: "{{ mongodb_apt_repo_file }}"
+      dest: "/etc/apt/sources.list.d/{{ mongodb_apt_repo_file }}"
+      owner: root
+      group: root
+      mode: u=rw,g=r,o=r
+    register: __mongodb_repo
+  
+  # apt update
+  - when: __mongodb_repo.changed
+    name: Update apt cache
+    become: true
+    ansible.builtin.apt:
+      update_cache: true
+  
+  # install
+  - name: Install mongodb-org
+    become: true
+    ansible.builtin.apt:
+      state: present
+      name: mongodb-org
