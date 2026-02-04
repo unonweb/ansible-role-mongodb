@@ -1,3 +1,14 @@
 ---
+# APT
 mongodb_apt_repo_file: mongodb-org-8.2.list
 mongodb_apt_repo_key_file: mongodb-server-8.0.gpg
+# SYSTEMD
+mongodb_systemd_scope: system
+mongodb_systemd_copy: []
+mongodb_systemd_template: []
+mongodb_systemd_enable: []
+mongodb_systemd_disable: []
+mongodb_systemd_start: []
+mongodb_systemd_stop: []
+mongodb_systemd_overrides: []
+mongodb_systemd_reset: []

@@ -46,3 +46,6 @@
     ansible.builtin.apt:
       state: present
       name: mongodb-org
+
+  # systemd
+  - ansible.builtin.import_tasks: systemd.yml
